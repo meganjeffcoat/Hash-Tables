@@ -51,7 +51,13 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        hashed = self._hash_mod(key)
+        if self.storage[hashed] == None:
+            self.storage[hashed] = LinkedPair(key, value)
+        else:
+            collided = LinkedPair(key, value)
+            collided.next = self.storage[hashed]
+            self.storage[hashed] = collided
 
 
 
@@ -63,7 +69,10 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        if self.storage[self._hash_mod(key)] == None:
+            print('Warning')
+        else:
+            self.storage[self._hash_mod(key)] = None 
 
 
     def retrieve(self, key):
@@ -74,7 +83,7 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        return self.storage[self._hash_mod(key)].value
 
 
     def resize(self):
