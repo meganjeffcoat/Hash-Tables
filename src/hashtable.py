@@ -54,6 +54,7 @@ class HashTable:
         hashed = self._hash_mod(key)
         
         self.storage[hashed] = LinkedPair(key, value)
+        return self.storage
 
 
 
