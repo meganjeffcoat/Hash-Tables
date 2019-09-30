@@ -84,7 +84,11 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        self.capacity *= 2
+        new_storage = [None] * self.capacity
+        for i in [item for item in self.storage if item != None]:
+            new_storage[self._hash_mod(i.key)] = LinkedPair(i.key, i.value)
+        self.storage = new_storage
 
 
 
