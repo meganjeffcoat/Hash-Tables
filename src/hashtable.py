@@ -51,10 +51,29 @@ class HashTable:
 
         Fill this in.
         '''
+        ####### Day 2 ##########
         hashed = self._hash_mod(key)
+        if self.storage[hashed] is not None:
+            curr = self.storage[hashed]
+            while curr.next is not None:
+                curr = curr.next
+            curr.next = LinkedPair(key, value)
+            return
+        else:
+            self.storage[hashed] = LinkedPair(key, value)
+
+        ####### Day 1 ##########
+        # index = self._hash_mod(key)
+
+        # if self.storage[index] is not None:
+        #     print('Warning: Index collision')
+        #     return
+        # self.storage[index] = LinkedPair(key, value)
+
+        # hashed = self._hash_mod(key)
         
-        self.storage[hashed] = LinkedPair(key, value)
-        return self.storage
+        # self.storage[hashed] = LinkedPair(key, value)
+        # return self.storage
 
 
 
@@ -66,6 +85,13 @@ class HashTable:
 
         Fill this in.
         '''
+        # index = self._hash_mod(key)
+
+        # if self.storage[index] is None:
+        #     print("Warning: key not found")
+        #     return
+        # self.storage[index] = None
+
         hashed = self._hash_mod(key)
         if self.storage[hashed] == None:
             print('Warning')
@@ -82,9 +108,33 @@ class HashTable:
         Fill this in.
         '''
         hashed = self._hash_mod(key)
-        if self.storage[hashed] == None:
+        if self.storage[hashed] is None:
             return None
-        return self.storage[hashed].value
+        else:
+            curr = self.storage[hashed]
+            if curr.key == key:
+                return curr.value
+            while curr is not None:
+                if curr.key == key:
+                    return curr.value
+                else:
+                    curr = curr.next
+            return None
+
+        # index = self._hash_mod(key)
+        # pair = self.storage[index]
+
+        # if pair is None:
+        #     return None
+        # else:
+        #     return self.storage[index].value 
+
+
+        
+        # hashed = self._hash_mod(key)
+        # if self.storage[hashed] == None:
+        #     return None
+        # return self.storage[hashed].value
 
 
     def resize(self):
@@ -96,9 +146,27 @@ class HashTable:
         '''
         self.capacity *= 2
         new_storage = [None] * self.capacity
-        for i in [item for item in self.storage if item != None]:
-            new_storage[self._hash_mod(i.key)] = LinkedPair(i.key, i.value)
-        self.storage = new_storage
+
+        for pair in self.storage:
+            if pair is not None:
+                new_hashed = self._hash_mod(pair.key)
+                new_storage[new_hashed] = pair
+            self.storage = new_storage
+
+        # self.capacity *= 2
+        # new_storage = [None] * self.capacity
+
+        # for pair in self.storage:
+        #     if pair is not None:
+        #         new_index = self._hash_mod(pair.key)
+        #         new_storage[new_index] = pair
+        #     self.storage = new_storage 
+
+        # self.capacity *= 2
+        # new_storage = [None] * self.capacity
+        # for i in [item for item in self.storage if item != None]:
+        #     new_storage[self._hash_mod(i.key)] = LinkedPair(i.key, i.value)
+        # self.storage = new_storage
 
 
 
@@ -115,6 +183,9 @@ if __name__ == "__main__":
     print(ht.retrieve("line_1"))
     print(ht.retrieve("line_2"))
     print(ht.retrieve("line_3"))
+
+    # ht.remove("line_3")
+    # ht.remove("line_3") 
 
     # Test resizing
     old_capacity = len(ht.storage)
