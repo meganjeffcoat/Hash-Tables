@@ -52,15 +52,15 @@ class HashTable:
         Fill this in.
         '''
         ####### Day 2 ##########
-        hashed = self._hash_mod(key)
-        if self.storage[hashed] is not None:
-            curr = self.storage[hashed]
-            while curr.next is not None:
+        index = self._hash_mod(key)
+        if self.storage[index] is not None:
+            curr = self.storage[index]
+            while curr.next is not None and curr.key != key:
                 curr = curr.next
             curr.next = LinkedPair(key, value)
             return
         else:
-            self.storage[hashed] = LinkedPair(key, value)
+            self.storage[index] = LinkedPair(key, value)
 
         ####### Day 1 ##########
         # index = self._hash_mod(key)
@@ -146,12 +146,15 @@ class HashTable:
         '''
         self.capacity *= 2
         new_storage = [None] * self.capacity
+        for i in [item for item in self.storage if item != None]:
+            curr = i
+            while curr is not None:
+                new_storage[self._hash_mod(curr.key)] = LinkedPair(
+                    curr.key, curr.value)
+                curr = curr.next
 
-        for pair in self.storage:
-            if pair is not None:
-                new_hashed = self._hash_mod(pair.key)
-                new_storage[new_hashed] = pair
-            self.storage = new_storage
+        self.storage = new_storage
+            
 
         # self.capacity *= 2
         # new_storage = [None] * self.capacity
